@@ -30,7 +30,7 @@ int search(char* array, char* item, int length)
 
 asisten namaAsisten (char initial)
 {
-	asisten Assist;
+	asisten Assist = {0};
 	char* nama;
 	if (initial=='A')
 	{
@@ -111,7 +111,7 @@ void assignAsisten(jadwal_t* jadwal)
 	char init;
 	char* day, lab;
 	int week;
-	asisten Assist_func;
+	asisten Assist_func = {0};
 	do
 	{
 		printf("Pilih Asisten (A-N): ");
@@ -179,8 +179,8 @@ int cekBisa(asisten asis, char* item)
 int cekAda(asisten asis, int week, char* day, char* lab, jadwal_t jadwal)
 {
 	int val;
-	int hari = str2enum_hari(&day);
-	int room = str2enum_lab(&lab);
+	int hari = str2enum_hari(day);
+	int room = str2enum_lab(lab);
 
 	char* prak = jadwal[week-3][hari].lab[room].prak;
 	if(search(asis.prak, prak, 4)==1)
@@ -198,11 +198,11 @@ void scanMinggu(int* week)
 	do
 	{
 		printf("Minggu: "); scanf("%d", week);
-		if ((&week-3)<0)||((&week-3)>12))
+		if ((*week-3)<0)||((*week-3)>12))
 		{
 			printf("Minggu salah\n");
 		}
-	} while ((&week-3)<0)||((&week-3)>12));
+	} while ((*week-3)<0)||((*week-3)>12));
 }
 
 void scanHari(char* day)
@@ -210,11 +210,11 @@ void scanHari(char* day)
 	do
 	{
 		printf("Hari: "); scanf("%s", day);
-		if ((str2enum_hari(&day)<0)||(str2enum_hari(&day)>4))
+		if ((str2enum_hari(day)<0)||(str2enum_hari(day)>4))
 		{
 			printf("Hari salah\n");
 		}
-	} while ((str2enum_hari(&day)<0)||(str2enum_hari(&day)>4));
+	} while ((str2enum_hari(day)<0)||(str2enum_hari(day)>4));
 }
 
 
@@ -222,12 +222,12 @@ void scanRuang(char* ruang)
 {
 	do
 	{
-		printf("Ruang: "); scanf("%s", &ruang);
-		if ((str2enum_lab(&ruang)<0)||(str2enum_lab(&ruang)>3))
+		printf("Ruang: "); scanf("%s", ruang);
+		if ((str2enum_lab(ruang)<0)||(str2enum_lab(ruang)>3))
 		{
 			printf("Ruang salah\n");
 		}
-	} while ((str2enum_lab(&ruang)<0)||(str2enum_lab(&ruang)>3));
+	} while ((str2enum_lab(ruang)<0)||(str2enum_lab(ruang)>3));
 }
 
 void AssignAssistenManual()
