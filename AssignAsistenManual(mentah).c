@@ -20,7 +20,7 @@ int search(char* array, char* item, int length)
 		{
 			val = 1;
 			break;
-		} else 
+		} else
 		{
 			i=i+1;
 		}
@@ -105,16 +105,17 @@ asisten namaAsisten (char initial)
 	}
 	return(Assist);
 }
-	
+
 void assignAsisten(jadwal_t* jadwal)
 {
 	char init;
 	char* day, lab;
 	int week;
 	asisten Assist_func;
-	do 
+	do
 	{
 		printf("Pilih Asisten (A-N): ");
+		bool test==0;
 		do
 		{
 			scanf("%c", &init);
@@ -122,29 +123,40 @@ void assignAsisten(jadwal_t* jadwal)
 			{
 				printf("Tidak ada asisten\n");
 			}
-		} while ((init!='A')&&(init!='B')&&(init!='C')&&(init!='D')&&(init!='E')&&(init!='F')&&(init!='G')&&(init!='H')&&(init!='I')&&(init!='J')&&(init!='K')&&(init!='L')&&(init!='M')&&(init!='N')&&(init!='Q')&&(init!='q'));
-		
+			else{
+                test==1;
+			}
+		} while (!test);
+
 		if((init!='Q')&&(init!='q')) //pasti asisten ada
 		{
 			Assist_func = namaAsisten(init);
 			scanMinggu(&week);
 			scanHari(&day);
 			scanRuang(&lab);
-			if (cekAda(Assist_func, week, day, lab, *jadwal))
-			{ 
-				//ada praktikum bersangkutan, cek bisa asisten bisa atau engga
-				if (cekBisa(Assist_func, day))
-				{ 
-					//cek apakah asisten bisa, jika bisa masukkan ke schedule
-					*jadwal[week-3][str2enum_hari(day)].lab[str2enum_lab(lab)].assist = Assist_func.nama;
+			if (*jadwal[week-3][str2enum_hari(day)].lab[str2enum_lab(lab)].assist_count<2) //jumlah asisten kurang dari dua
+			{
+				if (cekAda(Assist_func, week, day, lab, *jadwal))
+				{
+					//ada praktikum bersangkutan, cek bisa asisten bisa atau engga
+					if (cekBisa(Assist_func, day))
+					{
+						//cek apakah asisten bisa, jika bisa masukkan ke schedule
+						int count = *jadwal[week-3][str2enum_hari(day)].lab[str2enum_lab(lab)].assist_count;
+						*jadwal[week-3][str2enum_hari(day)].lab[str2enum_lab(lab)].assist[count] = Assist_func.nama;
+						*jadwal[week-3][str2enum_hari(day)].lab[str2enum_lab(lab)].assist_count++; //jumlah assist_count naik
+					} else
+					{
+						//cetak error asisten tidak bisa
+						printf("Asisten berhalangan pada hari %s\n", day);
+					}
 				} else
 				{
-					//cetak error asisten tidak bisa
-					printf("Asisten berhalangan pada hari %s\n", day);
+					printf("Jadwal Asisten Praktikum %s tidak sesuai (tidak ada praktikum bersangkutan)\n");
 				}
-			} else 
+			} else
 			{
-				printf("Jadwal Asisten Praktikum %s tidak sesuai (tidak ada praktikum bersangkutan)\n");
+				printf("Asisten sudah penuh\n");
 			}
 		} else
 	} while ((init!='Q')&&(init!='q'));
@@ -154,10 +166,10 @@ void assignAsisten(jadwal_t* jadwal)
 int cekBisa(asisten asis, char* item)
 {
 	int val;
-	if(search(asis.hari, item, 5)==0)
+	if(search(asis.hari, &item, 5)==0)
 	{
 		val = 1;
-	} else 
+	} else
 	{
 		val = 0;
 	}
@@ -167,9 +179,9 @@ int cekBisa(asisten asis, char* item)
 int cekAda(asisten asis, int week, char* day, char* lab, jadwal_t jadwal)
 {
 	int val;
-	int hari = str2enum_hari(day);
-	int room = str2enum_lab(lab);
-		
+	int hari = str2enum_hari(&day);
+	int room = str2enum_lab(&lab);
+
 	char* prak = jadwal[week-3][hari].lab[room].prak;
 	if(search(asis.prak, prak, 4)==1)
 	{
@@ -186,11 +198,11 @@ void scanMinggu(int* week)
 	do
 	{
 		printf("Minggu: "); scanf("%d", week);
-		if ((week-3)<0)||((week-3)>12))
+		if ((&week-3)<0)||((&week-3)>12))
 		{
 			printf("Minggu salah\n");
 		}
-	} while ((week-3)<0)||((week-3)>12));
+	} while ((&week-3)<0)||((&week-3)>12));
 }
 
 void scanHari(char* day)
@@ -198,27 +210,27 @@ void scanHari(char* day)
 	do
 	{
 		printf("Hari: "); scanf("%s", day);
-		if ((str2enum_hari(day)<0)||(str2enum_hari(day)>4))
+		if ((str2enum_hari(&day)<0)||(str2enum_hari(&day)>4))
 		{
 			printf("Hari salah\n");
 		}
-	} while ((str2enum_hari(day)<0)||(str2enum_hari(day)>4));
+	} while ((str2enum_hari(&day)<0)||(str2enum_hari(&day)>4));
 }
-	
+
 
 void scanRuang(char* ruang)
 {
 	do
 	{
-		printf("Ruang: "); scanf("%s", ruang);
-		if ((str2enum_lab(ruang)<0)||(str2enum_lab(ruang)>3))
+		printf("Ruang: "); scanf("%s", &ruang);
+		if ((str2enum_lab(&ruang)<0)||(str2enum_lab(&ruang)>3))
 		{
 			printf("Ruang salah\n");
 		}
-	} while ((str2enum_lab(ruang)<0)||(str2enum_lab(ruang)>3));
+	} while ((str2enum_lab(&ruang)<0)||(str2enum_lab(&ruang)>3));
 }
-			
-void main() 
+
+void AssignAssistenManual()
 {
 	printf("[Mode Assign Asisten]\n");
 	printf("Isi `q` atau `Q` untuk kembali ke menu\n");
