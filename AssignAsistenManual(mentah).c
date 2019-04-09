@@ -230,7 +230,7 @@ void scanRuang(char* ruang)
 	} while ((str2enum_lab(ruang)<0)||(str2enum_lab(ruang)>3));
 }
 
-void AssignAssistenManual()
+void AssignAssistenManua()
 {
 	printf("[Mode Assign Asisten]\n");
 	printf("Isi `q` atau `Q` untuk kembali ke menu\n");
