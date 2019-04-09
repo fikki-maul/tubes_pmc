@@ -9,10 +9,9 @@ typedef struct
 	char* prak[4];
 	char* hari[5];
 } asisten;
-asisten Assist;
 
 //cek search lagi
-int search(char** array, char* item, int length)
+int search(char* array, char* item, int length)
 {
     int i=0, val=0;
     while((array[i]!='0')&&(i<length))
